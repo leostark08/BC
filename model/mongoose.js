@@ -18,9 +18,9 @@ dbuser = process.env.DB_USER;
 dbpassword = "Cer%40dm1n";
 dbname = process.env.DB_NAME;
 
-// const mongoURL = `mongodb://${dbuser}:${dbpassword}@${dbhost}:${dbport}/${dbname}`;
+const mongoURL = `mongodb://${dbuser}:${dbpassword}@${dbhost}:${dbport}/${dbname}`;
 // const mongoURL = `mongodb://admin:Cer%40dm1n@localhost:27017/?authMechanism=DEFAULT&authSource=certification`;
-const mongoURL = `mongodb+srv://certification:qOBDG4XSAsKBtK4T@cluster0.edtprcb.mongodb.net/?retryWrites=true&w=majority`;
+// const mongoURL = `mongodb+srv://certification:qOBDG4XSAsKBtK4T@cluster0.edtprcb.mongodb.net/?retryWrites=true&w=majority`;
 mongoose.Promise = global.Promise;
 
 mongoose

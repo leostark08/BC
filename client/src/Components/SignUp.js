@@ -80,7 +80,9 @@ class SignUp extends Component {
         this.setState({ currentState: "load" });
         const { name, email, password } = this.state;
         addUser(name, email, password);
-    };
+        window.alert("Signup Successfully");
+        };
+    
 
     render() {
         const { classes } = this.props;
@@ -107,8 +109,8 @@ class SignUp extends Component {
                             >
                                 <FormControl margin="normal" required fullWidth>
                                     <InputLabel htmlFor="name">Name</InputLabel>
-                                    <Input
-                                        id="name"
+                                    <Input style={{fontSize: '20 !important'}}
+                                        id="name1"
                                         name="name"
                                         onChange={this.handleChange("name")}
                                     />
@@ -153,7 +155,7 @@ class SignUp extends Component {
                                     color="primary"
                                     className={classes.submit}
                                 >
-                                    Sign in
+                                    Sign Up
                                 </Button>
                             </form>
                         </Paper>

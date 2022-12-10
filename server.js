@@ -82,9 +82,7 @@ app.get("/message", (req, res) => {
                     //                 user.privateKey ==
                     //                 decryptedData[0].privateKey
                     //             ) {
-                    //                 obj[index].hash =
-                    //                     "http://localhost:3001/display/certificate/" +
-                    //                     decryptedData[0].certificateID;
+                    //                 obj[index].hash = true
                     //             } else {
                     //                 obj[index].hash = "";
                     //             }
@@ -152,6 +150,9 @@ app.post("/sign-up", (req, res) => {
     const privateKey = CryptoJS.HmacSHA1(now, "Key");
     const user = new User({ name, email, password, privateKey });
     user.save();
+    return res.status(201).send({
+        data: "success",
+    });
 });
 
 app.post("/login", (req, res) => {
@@ -171,7 +172,7 @@ app.post("/login", (req, res) => {
 app.post("/certificate/generate", (req, res) => {
     const { candidateName, orgName, courseName, assignDate, duration } =
         req.body;
-    const userID = "62a0d5d042179cc20fa2b95d";
+    const userID = "62a19e2444b208dccbaa869e";
 
     const given = new Date(assignDate);
 

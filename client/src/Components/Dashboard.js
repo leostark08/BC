@@ -10,6 +10,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Tooltip from "@material-ui/core/Tooltip";
 import HelpIcon from "@material-ui/icons/Help";
 import LockIcon from "@material-ui/icons/Lock";
+import { Redirect } from 'react-router'
 import {
     getCertificate,
     verifyCertificate,
@@ -45,7 +46,7 @@ const styles = (theme) => ({
             maxWidth: "95%",
             margin: theme.spacing(2),
         },
-        maxWidth: "60%",
+        // maxWidth: "60%",
         minWidth: "60%",
         margin: theme.spacing(5),
         display: "flex",
@@ -97,6 +98,7 @@ class Dashboard extends React.Component {
 
     send = () => {
         sendCertification(this.state.certificateId);
+        
     };
 
     componentDidMount() {

@@ -87,6 +87,7 @@ export const sendCertification = (certificateId) =>
         })
         .catch((err) => {
             console.log(err);
+            return false;
         });
 
 export const getAllMessage = () =>

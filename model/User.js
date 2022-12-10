@@ -18,12 +18,12 @@ const UserSchema = new mongoose.Schema({
     },
     publicKey: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
     privateKey: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
 });

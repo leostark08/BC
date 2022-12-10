@@ -1,23 +1,10 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import VerifyBadge from "./VerifyBadge";
-import FailureBadge from "./FailureBadge";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Tooltip from "@material-ui/core/Tooltip";
-import HelpIcon from "@material-ui/icons/Help";
-import LockIcon from "@material-ui/icons/Lock";
 import {
     getAllMessage,
-    getCertificate,
     verifyCertificate,
     sendCertification,
 } from "../Utils/apiConnect";
-import Loader from "./Loader";
-import Certificate from "./Certificate";
 
 const styles = (theme) => ({
     root: {
@@ -127,21 +114,31 @@ class Check extends React.Component {
             expirationDate,
         } = this.state.info;
         const tooltipInfo = `This verifies whether the certification is secured and stored with correct information in the blockchain`;
-
         return (
             <div className="container">
                 <h1> Certification List</h1>
                 <ul>
+                <table id="tableCer">
+                    <th>ID Certificates</th>
+                    {/* <th>Name</th> */}
+                    <th>Status</th>
                     {myArray.map((message) => {
-                        if (message.hash !== null) {
+                        
                             return (
-                                <li>
-                                    <a href={message.hash}>{message._id}</a>
-                                </li>
+                                <tr>
+                                    <td id="idCer">
+                                        <a href={message.hash}>{message._id}</a>
+                                    </td>
+                                    <td id="name">
+                                        {/* {message.candidateName} */}
+                                    </td>
+                                    <td id="statusCer">{message.hash !== undefined ? "True" : "False"}</td>
+                                </tr>
                             );
-                        } else return "a";
                     })}
+                    </table>
                 </ul>
+                
             </div>
         );
     }

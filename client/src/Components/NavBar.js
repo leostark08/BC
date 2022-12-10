@@ -134,6 +134,9 @@ class NavBar extends React.Component {
         <MenuItem component={Link} to="/login">
           Login
         </MenuItem>
+        <MenuItem component={Link} to="/check">
+          My Message
+        </MenuItem>
       </Menu>
     );
 
@@ -147,7 +150,7 @@ class NavBar extends React.Component {
       >
         <MenuItem>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
+            <Badge badgeContent={3} color="secondary">
               <MailIcon />
             </Badge>
           </IconButton>

@@ -18,232 +18,286 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import Link from "react-router-dom/Link";
 
-const styles = theme => ({
-  root: {
-    width: "100%"
-  },
-  grow: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20
-  },
-  title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block"
-    }
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import { Redirect } from "react-router-dom";
+import { Bell, Icon } from "react-bootstrap-icons";
+const styles = (theme) => ({
+    root: {
+        width: "100%",
     },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto"
-    }
-  },
-  searchIcon: {
-    width: theme.spacing(9),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  inputRoot: {
-    color: "inherit",
-    width: "100%"
-  },
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing(10),
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: 200
-    }
-  },
-  sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex"
-    }
-  },
-  sectionMobile: {
-    display: "flex",
-    [theme.breakpoints.up("md")]: {
-      display: "none"
-    }
-  }
+    grow: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginLeft: -12,
+        marginRight: 20,
+    },
+    title: {
+        display: "none",
+        [theme.breakpoints.up("sm")]: {
+            display: "block",
+        },
+    },
+    search: {
+        position: "relative",
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        "&:hover": {
+            backgroundColor: fade(theme.palette.common.white, 0.25),
+        },
+        marginRight: theme.spacing(2),
+        marginLeft: 0,
+        width: "100%",
+        [theme.breakpoints.up("sm")]: {
+            marginLeft: theme.spacing(3),
+            width: "auto",
+        },
+    },
+    searchIcon: {
+        width: theme.spacing(9),
+        height: "100%",
+        position: "absolute",
+        pointerEvents: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    inputRoot: {
+        color: "inherit",
+        width: "100%",
+    },
+    inputInput: {
+        paddingTop: theme.spacing.unit,
+        paddingRight: theme.spacing.unit,
+        paddingBottom: theme.spacing.unit,
+        paddingLeft: theme.spacing(10),
+        transition: theme.transitions.create("width"),
+        width: "100%",
+        [theme.breakpoints.up("md")]: {
+            width: 200,
+        },
+    },
+    sectionDesktop: {
+        display: "none",
+        [theme.breakpoints.up("md")]: {
+            display: "flex",
+        },
+    },
+    sectionMobile: {
+        display: "flex",
+        [theme.breakpoints.up("md")]: {
+            display: "none",
+        },
+    },
 });
 
 class NavBar extends React.Component {
-  state = {
-    anchorEl: null,
-    mobileMoreAnchorEl: null
-  };
+    state = {
+        anchorEl: null,
+        mobileMoreAnchorEl: null,
+    };
 
-  handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+    handleProfileMenuOpen = (event) => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
 
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
-  };
+    handleMenuClose = () => {
+        this.setState({ anchorEl: null });
+        this.handleMobileMenuClose();
+    };
 
-  handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
+    handleMobileMenuOpen = (event) => {
+        this.setState({ mobileMoreAnchorEl: event.currentTarget });
+    };
 
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
-  };
+    handleMobileMenuClose = () => {
+        this.setState({ mobileMoreAnchorEl: null });
+    };
+    handleLogout = () => {
+        localStorage.clear();
+        window.location.replace("/");
+    };
 
-  render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    render() {
+        const { anchorEl, mobileMoreAnchorEl } = this.state;
+        const { classes } = this.props;
+        const isMenuOpen = Boolean(anchorEl);
+        const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+        const user = localStorage.getItem("user");
+        let isLogged = false;
+        let isAdmin = false;
+        let title = "";
+        if (user) {
+            isLogged = true;
+            const loggedUser = JSON.parse(user);
+            isAdmin = loggedUser.role == 1;
+            title = loggedUser.name;
+        }
+        const rightNav = isLogged ? (
+            <>
+                <Nav.Link href="/display/certificate">
+                    <Bell />
+                </Nav.Link>
+                <NavDropdown title={title} id="collasible-nav-dropdown">
+                    <NavDropdown.Item href="#action/3.1">
+                        Profile
+                    </NavDropdown.Item>
+                    {/* <NavDropdown.Divider /> */}
+                    <NavDropdown.Item onClick={this.handleLogout}>
+                        Logout
+                    </NavDropdown.Item>
+                </NavDropdown>
+            </>
+        ) : (
+            <Nav.Link href="/sign-in">Sign In</Nav.Link>
+        );
+        const leftNav = isLogged ? (
+            isAdmin ? (
+                <>
+                    <Nav.Link href="/display/certificate">Dashboard</Nav.Link>
+                    <Nav.Link href="/generate-certificate">
+                        New certificate
+                    </Nav.Link>
+                </>
+            ) : (
+                <Nav.Link href="/">Profile</Nav.Link>
+            )
+        ) : (
+            ""
+        );
 
-    const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={isMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem component={Link} to="/generate-certificate">
-          Generate Certificate
-        </MenuItem>
-        <MenuItem component={Link} to="/display/certificate">
-          Dashboard
-        </MenuItem>
-        <MenuItem component={Link} to="/login">
-          Login
-        </MenuItem>
-      </Menu>
-    );
-
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMobileMenuClose}
-      >
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Menu>
-    );
-
-    return (
-      <div className={classes.root}>
-        <AppBar position="static" color="primary">
-          <Toolbar>
-            <IconButton
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="Icon"
-              component={Link}
-              to="/"
+        const renderMenu = (
+            <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                open={isMenuOpen}
+                onClose={this.handleMenuClose}
             >
-              <HomeIcon />
-            </IconButton>
-            <Typography
-              className={classes.title}
-              variant="h6"
-              color="inherit"
-              noWrap
+                <MenuItem component={Link} to="/generate-certificate">
+                    Generate Certificate
+                </MenuItem>
+                <MenuItem component={Link} to="/display/certificate">
+                    Dashboard
+                </MenuItem>
+                <MenuItem component={Link} to="/login">
+                    Login
+                </MenuItem>
+            </Menu>
+        );
+
+        const renderMobileMenu = (
+            <Menu
+                anchorEl={mobileMoreAnchorEl}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                open={isMobileMenuOpen}
+                onClose={this.handleMobileMenuClose}
             >
-              CertifyBlock
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-              />
-            </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton color="inherit">
-                <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                aria-owns={isMenuOpen ? "material-appbar" : undefined}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton
-                aria-haspopup="true"
-                onClick={this.handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MoreIcon />
-              </IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-        {renderMenu}
-        {renderMobileMenu}
-      </div>
-    );
-  }
+                <MenuItem>
+                    <IconButton color="inherit">
+                        <Badge badgeContent={11} color="secondary">
+                            <NotificationsIcon />
+                        </Badge>
+                    </IconButton>
+                    <p>Notifications</p>
+                </MenuItem>
+                <MenuItem onClick={this.handleProfileMenuOpen}>
+                    <IconButton color="inherit">
+                        <AccountCircle />
+                    </IconButton>
+                    <p>Profile</p>
+                </MenuItem>
+            </Menu>
+        );
+
+        return (
+            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                <Container>
+                    <Navbar.Brand href="/">DICERTI</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="me-auto">{leftNav}</Nav>
+                        <Nav>{rightNav}</Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+            // <div className={classes.root}>
+            //     <AppBar position="static" color="primary">
+            //         <Toolbar>
+            //             <IconButton
+            //                 className={classes.menuButton}
+            //                 color="inherit"
+            //                 aria-label="Icon"
+            //                 component={Link}
+            //                 to="/"
+            //             >
+            //                 <HomeIcon />
+            //             </IconButton>
+            //             <Typography
+            //                 className={classes.title}
+            //                 variant="h6"
+            //                 color="inherit"
+            //                 noWrap
+            //             >
+            //                 Diploma certification
+            //             </Typography>
+            //             <div className={classes.search}>
+            //                 <div className={classes.searchIcon}>
+            //                     <SearchIcon />
+            //                 </div>
+            //                 <InputBase
+            //                     placeholder="Search…"
+            //                     classes={{
+            //                         root: classes.inputRoot,
+            //                         input: classes.inputInput,
+            //                     }}
+            //                 />
+            //             </div>
+            //             <div className={classes.grow} />
+            //             <div className={classes.sectionDesktop}>
+            //                 <IconButton color="inherit">
+            //                     <Badge badgeContent={17} color="secondary">
+            //                         <NotificationsIcon />
+            //                     </Badge>
+            //                 </IconButton>
+            //                 <IconButton
+            //                     aria-owns={
+            //                         isMenuOpen ? "material-appbar" : undefined
+            //                     }
+            //                     aria-haspopup="true"
+            //                     onClick={this.handleProfileMenuOpen}
+            //                     color="inherit"
+            //                 >
+            //                     <AccountCircle />
+            //                 </IconButton>
+            //             </div>
+            //             <div className={classes.sectionMobile}>
+            //                 <IconButton
+            //                     aria-haspopup="true"
+            //                     onClick={this.handleMobileMenuOpen}
+            //                     color="inherit"
+            //                 >
+            //                     <MoreIcon />
+            //                 </IconButton>
+            //             </div>
+            //         </Toolbar>
+            //     </AppBar>
+            //     {renderMenu}
+            //     {renderMobileMenu}
+            // </div>
+        );
+    }
 }
 
 NavBar.propTypes = {
-  classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(NavBar);

@@ -9,6 +9,7 @@ import Homepage from "./Components/Homepage";
 import Dashboard from "./Components/Dashboard";
 import GenerateForm from "./Components/GenerateForm";
 import { Helmet } from "react-helmet";
+import "bootstrap/dist/css/bootstrap.min.css";
 class App extends Component {
     render() {
         return (
@@ -23,7 +24,7 @@ class App extends Component {
                     <NavBar />
                     <Switch>
                         <Route exact path="/" component={Homepage} />
-                        <Route path="/login" component={SignIn} />
+                        <Route path="/sign-in" component={SignIn} />
                         <Route path="/sign-up" component={SignUp} />
                         <Route path="/check" component={Check} />
                         <Route

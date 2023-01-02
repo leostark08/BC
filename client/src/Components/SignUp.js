@@ -79,7 +79,11 @@ class SignUp extends Component {
         event.preventDefault();
         this.setState({ currentState: "load" });
         const { name, email, password } = this.state;
-        addUser(name, email, password);
+        addUser(name, email, password).then((res) => {
+            if (res !== undefined) {
+                if (res.status) this.props.history.push("sign-in");
+            } else console.log("sign up err");
+        });
     };
 
     render() {

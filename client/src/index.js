@@ -7,21 +7,21 @@ import { BrowserRouter } from "react-router-dom";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 
 const theme = createTheme({
-  palette: {
-    primary: { main: "#2196f3" }
-  },
-  typography: {
-    useNextVariants: true
-  }
+    palette: {
+        primary: { main: "#2196f3" },
+    },
+    typography: {
+        useNextVariants: true,
+    },
 });
 
 ReactDOM.render(
-  <BrowserRouter>
-    <MuiThemeProvider theme={theme}>
-      <App />
-    </MuiThemeProvider>
-  </BrowserRouter>,
-  document.getElementById("root")
+    <BrowserRouter>
+        <MuiThemeProvider theme={theme}>
+            <App />
+        </MuiThemeProvider>
+    </BrowserRouter>,
+    document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

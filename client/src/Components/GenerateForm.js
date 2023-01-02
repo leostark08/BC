@@ -7,6 +7,13 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import SubmitAnimation from "./SubmitAnimation";
 import { generateCertificate } from "../Utils/apiConnect";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
+import { getAllUsers } from "../Utils/apiConnect";
 
 const styles = (theme) => ({
     container: {
@@ -30,7 +37,8 @@ const styles = (theme) => ({
             margin: theme.spacing.unit,
             padding: `${theme.spacing(2)}px`,
         },
-        minHeight: "75vh",
+        // minHeight: "75vh",
+        borderRadius: "7px",
         maxWidth: "95%",
         margin: theme.spacing(5),
         display: "flex",
@@ -47,9 +55,10 @@ const styles = (theme) => ({
             maxWidth: "95%",
             margin: theme.spacing(2),
         },
-        maxWidth: "60%",
-        minWidth: "60%",
-        margin: theme.spacing(5),
+        // maxWidth: "60%",
+        // minWidth: "60%",
+        marginTop: theme.spacing(5),
+        marginRight: theme.spacing(5),
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -80,6 +89,8 @@ const styles = (theme) => ({
 
 class GenerateForm extends React.Component {
     state = {
+        myArray: [],
+        userID: "",
         firstname: "",
         lastname: "",
         organization: "VKU University",
@@ -103,24 +114,15 @@ class GenerateForm extends React.Component {
             return;
         }
         this.setState({ currentState: "load" });
-        const {
-            firstname,
-            lastname,
-            organization,
-            coursename,
-            assignedOn,
-            duration,
-            emailId,
-        } = this.state;
-        let candidateName = `${firstname} ${lastname}`;
+        const { userID, organization, coursename, assignedOn, duration } =
+            this.state;
         let assignDate = new Date(assignedOn).getTime();
         generateCertificate(
-            candidateName,
+            userID,
             coursename,
             organization,
             assignDate,
-            parseInt(duration),
-            emailId
+            parseInt(duration)
         )
             .then((data) => {
                 if (data.data !== undefined)
@@ -132,9 +134,17 @@ class GenerateForm extends React.Component {
             .catch((err) => console.log(err));
     };
 
+    componentDidMount() {
+        getAllUsers().then((data) => {
+            this.setState({ myArray: data });
+        });
+    }
+
     render() {
         const { classes } = this.props;
         const {
+            myArray,
+            userID,
             firstname,
             lastname,
             organization,
@@ -152,7 +162,162 @@ class GenerateForm extends React.Component {
                         <Typography variant="h3" color="inherit">
                             Certificate Generation Form
                         </Typography>
-                        <form
+                        <Form autoComplete="off" onSubmit={this.submitData}>
+                            <Container>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formBasicEmail"
+                                        >
+                                            <Form.Label>
+                                                Select student
+                                            </Form.Label>
+                                            <Form.Select
+                                                aria-label="Default select example"
+                                                required
+                                                onChange={this.handleChange(
+                                                    "userID"
+                                                )}
+                                            >
+                                                <option>
+                                                    Click to choose user
+                                                </option>
+                                                {myArray.map((user, index) => {
+                                                    return (
+                                                        <option
+                                                            value={user._id}
+                                                            key={index}
+                                                        >
+                                                            {user.name}
+                                                        </option>
+                                                    );
+                                                })}
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formBasicEmail"
+                                        >
+                                            <Form.Label>
+                                                Organization
+                                            </Form.Label>
+                                            <Form.Control
+                                                required
+                                                defaultValue={organization}
+                                                type="text"
+                                                onChange={this.handleChange(
+                                                    "organization"
+                                                )}
+                                                placeholder="Enter organization"
+                                            />
+                                            <Form.Text className="text-muted">
+                                                Student certificate
+                                            </Form.Text>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formBasicEmail"
+                                        >
+                                            <Form.Label>
+                                                Certified for
+                                            </Form.Label>
+                                            <Form.Control
+                                                required
+                                                type="text"
+                                                onChange={this.handleChange(
+                                                    "coursename"
+                                                )}
+                                                placeholder="Enter certificate name"
+                                            />
+                                            <Form.Text className="text-muted">
+                                                Any course name or skill for
+                                                which the certificate is being
+                                                given.
+                                            </Form.Text>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formBasicEmail"
+                                        >
+                                            <Form.Label>
+                                                Assigned date
+                                            </Form.Label>
+                                            <Form.Control
+                                                required
+                                                type="date"
+                                                placeholder="Enter certificate name"
+                                                onChange={this.handleChange(
+                                                    "assignedOn"
+                                                )}
+                                            />
+                                            <Form.Text className="text-muted">
+                                                Assigned date of certificate
+                                            </Form.Text>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formBasicEmail"
+                                        >
+                                            <Form.Label>Duration</Form.Label>
+                                            <Form.Control
+                                                type="number"
+                                                required
+                                                onChange={this.handleChange(
+                                                    "duration"
+                                                )}
+                                                min={0}
+                                                placeholder="Enter certificate name"
+                                            />
+                                            <Form.Text className="text-muted">
+                                                Certificate duration
+                                            </Form.Text>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Button variant="primary" type="submit">
+                                            Save certificate
+                                        </Button>
+                                    </Col>
+                                    <Col>
+                                        {currentState === "validate" && (
+                                            <Typography
+                                                variant="caption"
+                                                color="inherit"
+                                                className={classes.submitBtn}
+                                            >
+                                                Certificate genrated with id{" "}
+                                                <a
+                                                    x="500"
+                                                    y="700"
+                                                    href={
+                                                        "/display/certificate/" +
+                                                        certificateId
+                                                    }
+                                                >
+                                                    {certificateId}
+                                                </a>
+                                            </Typography>
+                                        )}
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </Form>
+                        {/* <form
                             className={classes.container}
                             autoComplete="off"
                             onSubmit={this.submitData}
@@ -277,7 +442,7 @@ class GenerateForm extends React.Component {
                                     </Typography>
                                 )}
                             </Grid>
-                        </form>
+                        </form> */}
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm={4}>

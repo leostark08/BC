@@ -33,7 +33,9 @@ if (process.env.NODE_ENV !== "production") app.use(require("cors")());
 app.get("/certificate/data/:id", (req, res) => {
     let certificateId = req.params.id;
     Certificates.findById(certificateId)
+        .populate("userID")
         .then((obj) => {
+            console.log(obj);
             if (obj === null)
                 res.status(400).send({ err: "Certificate data doesn't exist" });
             else res.send(obj);
@@ -150,8 +152,21 @@ app.post("/sign-up", (req, res) => {
     const { name, email, password } = req.body;
     const now = new Date().toString().slice(4, 24);
     const privateKey = CryptoJS.HmacSHA1(now, "Key");
-    const user = new User({ name, email, password, privateKey });
-    user.save();
+    const publicKey = CryptoJS.HmacSHA1(now, "Key");
+    const user = new User({ name, email, password, publicKey, privateKey });
+    user.save()
+        .then((obj) => {
+            console.log(obj);
+            if (obj === null)
+                res.status(400).send({ err: "Create new user failure!" });
+            else
+                res.status(201).send({
+                    data: obj,
+                });
+        })
+        .catch((err) => {
+            res.status(400).send({ err });
+        });
 });
 
 app.post("/login", (req, res) => {
@@ -169,9 +184,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/certificate/generate", (req, res) => {
-    const { candidateName, orgName, courseName, assignDate, duration } =
-        req.body;
-    const userID = "62a0d5d042179cc20fa2b95d";
+    const { userID, orgName, courseName, assignDate, duration } = req.body;
 
     const given = new Date(assignDate);
 
@@ -180,13 +193,12 @@ app.post("/certificate/generate", (req, res) => {
     expirationDate = expirationDate.toString();
 
     const certificate = new Certificates({
-        candidateName,
+        userID,
         orgName,
         courseName,
         expirationDate,
         assignDate,
         duration,
-        userID,
     });
 
     certificate
@@ -210,6 +222,18 @@ app.post("/certificate/generate", (req, res) => {
             log.Error(err);
             res.status(400).send();
         });
+});
+
+app.get("/users", (req, res) => {
+    User.find({ role: 0 })
+        .then((obj) => {
+            if (obj === null)
+                res.status(400).send({ err: "Certificate data doesn't exist" });
+            else {
+                res.send(obj);
+            }
+        })
+        .catch((err) => res.status(400).send({ err: err }));
 });
 
 if (process.env.NODE_ENV === "production") {

@@ -14,6 +14,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 import ChainImage from "../Images/chainT.png";
 import { login } from "../Utils/apiConnect";
+import { Link } from "@material-ui/core";
 
 const styles = (theme) => ({
     hidden: {
@@ -23,12 +24,11 @@ const styles = (theme) => ({
     },
     paper: {
         [theme.breakpoints.up("sm")]: {
-            borderRadius: "5%",
+            borderRadius: "7px",
             marginRight: 30,
         },
         [theme.breakpoints.up(1150)]: {
             marginLeft: 50,
-            width: 300,
         },
         marginTop: theme.spacing(6),
         display: "flex",
@@ -80,8 +80,9 @@ class SignIn extends Component {
         this.setState({ currentState: "load" });
         const { email, password } = this.state;
         login(email, password).then((data) => {
-            if (data !== undefined) {
-                console.log(data.data);
+            if (data.data !== undefined) {
+                // console.log(data.data);
+                localStorage.setItem("user", JSON.stringify(data.data));
                 this.props.history.push(
                     "/display/certificate/" + data.data._id
                 );
@@ -155,6 +156,13 @@ class SignIn extends Component {
                                 >
                                     Sign in
                                 </Button>
+                                <Link
+                                    href="/sign-up"
+                                    underline="none"
+                                    className={classes.submit}
+                                >
+                                    Sign up account!
+                                </Link>
                             </form>
                         </Paper>
                     </Grid>

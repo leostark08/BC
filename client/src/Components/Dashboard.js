@@ -45,9 +45,10 @@ const styles = (theme) => ({
             maxWidth: "95%",
             margin: theme.spacing(2),
         },
-        maxWidth: "60%",
-        minWidth: "60%",
-        margin: theme.spacing(5),
+        // maxWidth: "60%",
+        // minWidth: "60%",
+        marginTop: theme.spacing(5),
+        marginRight: theme.spacing(5),
         display: "flex",
         flexDirection: "column",
         padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${
@@ -102,23 +103,17 @@ class Dashboard extends React.Component {
     componentDidMount() {
         const certificateId = this.props.match.params.id;
         getCertificate(certificateId).then((data) => {
-            const {
-                userID,
-                candidateName,
-                orgName,
-                courseName,
-                assignDate,
-                expirationDate,
-            } = data;
+            const { userID, orgName, courseName, assignDate, expirationDate } =
+                data;
+            var userName = data.userID.name;
             this.setState((prev) => {
                 const temp = prev;
                 temp.certificateId = certificateId;
                 temp.pageLoad = false;
                 temp.info = {
-                    candidateName,
                     orgName,
                     courseName,
-                    userID,
+                    userID: userName,
                     assignDate: new Date(assignDate).toString().slice(4, 15),
                     expirationDate: new Date(expirationDate)
                         .toString()
@@ -150,7 +145,7 @@ class Dashboard extends React.Component {
                             <Loader SIZE={170} />
                         ) : (
                             <Certificate
-                                name={candidateName}
+                                name={userID}
                                 title={courseName}
                                 date={assignDate}
                                 hash={certificateId}
@@ -166,13 +161,13 @@ class Dashboard extends React.Component {
                         <Paper className={classes.rightpaper}>
                             <div>
                                 <Typography variant="h5" color="inherit" noWrap>
-                                    {candidateName}
-                                </Typography>
-                                <Typography variant="h6" color="inherit" noWrap>
                                     {courseName}
                                 </Typography>
                                 <Typography variant="h6" color="inherit" noWrap>
                                     {orgName}
+                                </Typography>
+                                <Typography variant="h4" color="inherit" noWrap>
+                                    {userID}
                                 </Typography>
                                 <Typography
                                     variant="caption"

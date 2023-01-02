@@ -5,12 +5,8 @@ truffle_connect.connectWeb3();
 
 const CertificateSchema = new mongoose.Schema({
     userID: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    candidateName: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
         required: true,
         trim: true,
     },
@@ -60,13 +56,13 @@ CertificateSchema.methods.verifyData = function () {
         .getCertificateData(certificateId)
         .then((blockData) => {
             const responseObject = {
-                candidateName: blockData[0],
+                userID: blockData[0],
                 orgName: blockData[1],
                 courseName: blockData[2],
                 expirationDate: parseInt(blockData[3]),
             };
             const databaseObject = {
-                candidateName: data.candidateName,
+                userID: data.userID,
                 orgName: data.orgName,
                 courseName: data.courseName,
                 expirationDate: data.expirationDate,
@@ -86,13 +82,14 @@ CertificateSchema.methods.verifyData = function () {
 CertificateSchema.methods.appendBlockchain = function () {
     const data = this;
 
-    const { candidateName, orgName, courseName, expirationDate } = data;
+    const { userID, orgName, courseName, expirationDate } = data;
 
     const certificateId = data._id.toString();
+    const userID2string = userID.toString();
 
     return truffle_connect.generateCertificate(
         certificateId,
-        candidateName,
+        userID2string,
         orgName,
         courseName,
         expirationDate

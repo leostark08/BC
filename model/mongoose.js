@@ -15,12 +15,10 @@ if (process.env.NODE_ENV === "production") {
 }
 
 dbuser = process.env.DB_USER;
-dbpassword = "Cer%40dm1n";
+dbpassword = process.env.DB_PASSWORD;
 dbname = process.env.DB_NAME;
 
-// const mongoURL = `mongodb://${dbuser}:${dbpassword}@${dbhost}:${dbport}/${dbname}`;
-// const mongoURL = `mongodb://admin:Cer%40dm1n@localhost:27017/?authMechanism=DEFAULT&authSource=certification`;
-const mongoURL = `mongodb+srv://certification:qOBDG4XSAsKBtK4T@cluster0.edtprcb.mongodb.net/?retryWrites=true&w=majority`;
+const mongoURL = `mongodb+srv://${dbuser}:${dbpassword}@${dbhost}/${dbname}`;
 mongoose.Promise = global.Promise;
 
 mongoose
@@ -32,4 +30,4 @@ mongoose.connection.on("connected", (err) => log.Info("MongoDB Connected"));
 mongoose.connection.on("error", (err) => log.Error("error: " + err));
 
 module.exports = { mongoose };
-// qOBDG4XSAsKBtK4T
+// MLv7AMWD6SpuwNTn

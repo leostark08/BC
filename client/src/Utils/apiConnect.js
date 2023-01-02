@@ -34,22 +34,20 @@ export const verifyCertificate = (certificateId) =>
         });
 
 export const generateCertificate = (
-    candidateName,
+    userID,
     courseName,
     orgName,
     assignDate,
-    duration,
-    emailId
+    duration
 ) =>
     fetch(`${host}/certificate/generate`, {
         ...postHeader,
         body: JSON.stringify({
-            candidateName,
+            userID,
             courseName,
             orgName,
             assignDate,
             duration,
-            emailId,
         }),
     })
         .then((res) => res.json())
@@ -91,6 +89,12 @@ export const sendCertification = (certificateId) =>
 
 export const getAllMessage = () =>
     fetch(`${host}/message/`, getHeader)
+        .then((res) => res.json())
+        .catch((err) => {
+            console.log(err);
+        });
+export const getAllUsers = () =>
+    fetch(`${host}/users/`, getHeader)
         .then((res) => res.json())
         .catch((err) => {
             console.log(err);

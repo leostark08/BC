@@ -242,9 +242,15 @@
     font-weight: bold;
 }
 #name {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: AspireDemibold;
     font-size: 50px;
     font-weight: bold;
+}
+@font-face {
+    font-family: "AspireDemibold";
+    src: local("AspireDemibold"), url(font/AspireDemibold.ttf) format("woff");
+    /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
 }
 #subTitleHeader {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -340,4 +346,10 @@
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
+}
+#tableCer {
+    width: 50%;
+}
+#idCer {
+    padding: 10px;
 }

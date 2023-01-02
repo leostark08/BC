@@ -10,6 +10,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Tooltip from "@material-ui/core/Tooltip";
 import HelpIcon from "@material-ui/icons/Help";
 import LockIcon from "@material-ui/icons/Lock";
+import { Redirect } from "react-router";
 import {
     getCertificate,
     verifyCertificate,

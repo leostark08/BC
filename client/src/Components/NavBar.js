@@ -202,6 +202,14 @@ class NavBar extends React.Component {
             >
                 <MenuItem>
                     <IconButton color="inherit">
+                        <Badge badgeContent={4} color="secondary">
+                            <MailIcon />
+                        </Badge>
+                    </IconButton>
+                    <p>Messages</p>
+                </MenuItem>
+                <MenuItem>
+                    <IconButton color="inherit">
                         <Badge badgeContent={11} color="secondary">
                             <NotificationsIcon />
                         </Badge>

@@ -84,9 +84,7 @@ app.get("/message", (req, res) => {
                     //                 user.privateKey ==
                     //                 decryptedData[0].privateKey
                     //             ) {
-                    //                 obj[index].hash =
-                    //                     "http://localhost:3001/display/certificate/" +
-                    //                     decryptedData[0].certificateID;
+                    //                 obj[index].hash = true
                     //             } else {
                     //                 obj[index].hash = "";
                     //             }

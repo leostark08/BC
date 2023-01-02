@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-
+import '../font/AspireDemibold.ttf';
 function Certificate(props) {
     const { title, name, date, hash, logo } = props;
     return (
@@ -47,11 +47,7 @@ function Certificate(props) {
                 fill="black"
                 id="bodySubTitle"
             >
-                of
-            </text>
-            <line x1="250" y1="360" x2="750" y2="360" id="titleUnderLine" />
-            <text x="500" y="350" text-anchor="middle" fill="black" id="title">
-                {title}
+                of {title}
             </text>
             <text
                 x="500"
@@ -60,9 +56,9 @@ function Certificate(props) {
                 fill="black"
                 id="subTitleHeader"
             >
-                awarded to
+                This certificate is presented to 
             </text>
-            <text x="500" y="500" text-anchor="middle" fill="black" id="name">
+            <text x="500" y="500" text-anchor="middle" fill="black" id="name" fontFamily="AspireDemibold">
                 {name}
             </text>
             <line x1="200" y1="510" x2="800" y2="510" id="titleUnderLine" />

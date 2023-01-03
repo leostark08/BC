@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import  { Redirect } from 'react-router-dom'
+import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -84,9 +84,7 @@ class SignIn extends Component {
             if (data.data !== undefined) {
                 // console.log(data.data);
                 localStorage.setItem("user", JSON.stringify(data.data));
-                this.props.history.push(
-                    "/check"
-                );
+                this.props.history.push("/profile");
             } else window.alert("Error email or password");
         });
     };
@@ -165,7 +163,10 @@ class SignIn extends Component {
                                     Sign up account!
                                 </Link>
                             </form>
-                        <span style={{marginTop: "10px"}}>No have account ? <a href="/sign-up">Register Now</a></span>
+                            <span style={{ marginTop: "10px" }}>
+                                No have account ?{" "}
+                                <a href="/sign-up">Register Now</a>
+                            </span>
                         </Paper>
                     </Grid>
                 </Grid>

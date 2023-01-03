@@ -39,6 +39,7 @@
         "crypto-js": "^4.1.1",
         "css-loader": "^6.7.1",
         "dotenv": "^16.0.0",
+        "encrypt-rsa": "^2.1.2",
         "express": "^4.17.3",
         "jquery": "^3.6.0",
         "js-crypto-rsa": "^1.0.4",

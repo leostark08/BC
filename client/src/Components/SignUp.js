@@ -112,8 +112,7 @@ class SignUp extends Component {
                                 <FormControl margin="normal" required fullWidth>
                                     <InputLabel htmlFor="name">Name</InputLabel>
                                     <Input
-                                        style={{ fontSize: "20 !important" }}
-                                        id="name1"
+                                        id="name"
                                         name="name"
                                         onChange={this.handleChange("name")}
                                     />
@@ -158,7 +157,7 @@ class SignUp extends Component {
                                     color="primary"
                                     className={classes.submit}
                                 >
-                                    Sign Up
+                                    Sign in
                                 </Button>
                             </form>
                         </Paper>

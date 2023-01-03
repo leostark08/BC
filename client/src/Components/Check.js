@@ -90,6 +90,7 @@ class Check extends React.Component {
 
     componentDidMount() {
         getAllMessage().then((data) => {
+            console.log(data);
             this.setState({ myArray: data });
         });
     }
@@ -118,27 +119,34 @@ class Check extends React.Component {
             <div className="container">
                 <h1> Certification List</h1>
                 <ul>
-                <table id="tableCer">
-                    <th>ID Certificates</th>
-                    {/* <th>Name</th> */}
-                    <th>Status</th>
-                    {myArray.map((message) => {
-                        
+                    <table striped hover id="tableCer">
+                        <th>ID Certificates</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        {myArray.map((message, index) => {
                             return (
-                                <tr>
+                                <tr key={index}>
                                     <td id="idCer">
-                                        <a href={message.hash}>{message._id}</a>
+                                        <a
+                                            href={
+                                                "/display/certificate/" +
+                                                message.hash
+                                            }
+                                        >
+                                            {message.hash}
+                                        </a>
                                     </td>
-                                    <td id="name">
-                                        {/* {message.candidateName} */}
+                                    <td id="name">{message.author.name}</td>
+                                    <td id="statusCer">
+                                        {message.hash !== undefined
+                                            ? "Intact"
+                                            : "Changed"}
                                     </td>
-                                    <td id="statusCer">{message.hash !== undefined ? "True" : "False"}</td>
                                 </tr>
                             );
-                    })}
+                        })}
                     </table>
                 </ul>
-                
             </div>
         );
     }

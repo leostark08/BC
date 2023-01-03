@@ -8,6 +8,7 @@ import NavBar from "./Components/NavBar";
 import Homepage from "./Components/Homepage";
 import Dashboard from "./Components/Dashboard";
 import GenerateForm from "./Components/GenerateForm";
+import Profile from "./Components/Profile";
 import { Helmet } from "react-helmet";
 import "bootstrap/dist/css/bootstrap.min.css";
 class App extends Component {
@@ -27,6 +28,7 @@ class App extends Component {
                         <Route path="/sign-in" component={SignIn} />
                         <Route path="/sign-up" component={SignUp} />
                         <Route path="/check" component={Check} />
+                        <Route path="/profile" component={Profile} />
                         <Route
                             path="/generate-certificate"
                             component={GenerateForm}

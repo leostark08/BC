@@ -14,7 +14,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 
-import { getAllCertificates } from "../Utils/apiConnect";
+import { getCertificates } from "../Utils/apiConnect";
 
 const styles = (theme) => ({
     container: {
@@ -88,7 +88,7 @@ const styles = (theme) => ({
     },
 });
 
-class Homepage extends React.Component {
+class Profile extends React.Component {
     state = {
         myArray: [],
         userID: "",
@@ -136,7 +136,9 @@ class Homepage extends React.Component {
     };
 
     componentDidMount() {
-        getAllCertificates().then((data) => {
+        const user = localStorage.getItem("user");
+        const loggedUser = JSON.parse(user);
+        getCertificates(loggedUser._id).then((data) => {
             this.setState({ myArray: data });
         });
     }
@@ -168,7 +170,6 @@ class Homepage extends React.Component {
                                 <tr>
                                     <th>#</th>
                                     <th>ID</th>
-                                    <th>Candidate name</th>
                                     <th>Certificate name</th>
                                     <th>Status</th>
                                 </tr>
@@ -189,7 +190,6 @@ class Homepage extends React.Component {
                                                     {certificate.certificateId}
                                                 </a>
                                             </td>
-                                            <td>{certificate.userID.name}</td>
                                             <td>{certificate.courseName}</td>
                                             <td></td>
                                         </tr>
@@ -220,8 +220,8 @@ class Homepage extends React.Component {
     }
 }
 
-Homepage.propTypes = {
+Profile.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Homepage);
+export default withStyles(styles)(Profile);

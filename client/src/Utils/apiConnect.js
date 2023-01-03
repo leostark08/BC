@@ -77,8 +77,11 @@ export const login = (email, password) =>
         .catch((err) => {
             console.log(err);
         });
-export const sendCertification = (certificateId) =>
-    fetch(`${host}/certificate/send/${certificateId}`, getHeader)
+export const sendCertification = (loggedId, receiveID, certificateId) => {
+    fetch(
+        `${host}/certificate/send/${loggedId}/${receiveID}/${certificateId}`,
+        getHeader
+    )
         .then((res) => {
             if (res.status === 200) return true;
             else if (res.status === 401) return false;
@@ -87,15 +90,38 @@ export const sendCertification = (certificateId) =>
             console.log(err);
             return false;
         });
+};
 
-export const getAllMessage = () =>
-    fetch(`${host}/message/`, getHeader)
+export const getAllMessage = () => {
+    const user = localStorage.getItem("user");
+    const loggedUser = JSON.parse(user);
+    return fetch(`${host}/message/${loggedUser._id}`, getHeader)
         .then((res) => res.json())
         .catch((err) => {
             console.log(err);
         });
+};
+
 export const getAllUsers = () =>
     fetch(`${host}/users/`, getHeader)
+        .then((res) => res.json())
+        .catch((err) => {
+            console.log(err);
+        });
+export const getAllCertificates = () =>
+    fetch(`${host}/certificates/`, getHeader)
+        .then((res) => res.json())
+        .catch((err) => {
+            console.log(err);
+        });
+export const getCertificates = (userID) =>
+    fetch(`${host}/profile/${userID}`, getHeader)
+        .then((res) => res.json())
+        .catch((err) => {
+            console.log(err);
+        });
+export const getFriends = (userID) =>
+    fetch(`${host}/friends/${userID}`, getHeader)
         .then((res) => res.json())
         .catch((err) => {
             console.log(err);

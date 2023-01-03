@@ -11,13 +11,16 @@ import Tooltip from "@material-ui/core/Tooltip";
 import HelpIcon from "@material-ui/icons/Help";
 import LockIcon from "@material-ui/icons/Lock";
 import { Redirect } from "react-router";
+import Table from "react-bootstrap/Table";
 import {
     getCertificate,
     verifyCertificate,
     sendCertification,
+    getFriends,
 } from "../Utils/apiConnect";
 import Loader from "./Loader";
 import Certificate from "./Certificate";
+import { SendFill } from "react-bootstrap-icons";
 
 const styles = (theme) => ({
     root: {
@@ -74,7 +77,10 @@ class Dashboard extends React.Component {
     state = {
         verified: false,
         authorized: false,
+        loggedId: "",
         loading: false,
+        isSelf: false,
+        friends: [],
         pageLoad: true,
         info: {
             candidateName: "",
@@ -97,19 +103,28 @@ class Dashboard extends React.Component {
         });
     };
 
-    send = () => {
-        sendCertification(this.state.certificateId);
+    send = (receiveID) => {
+        sendCertification(
+            this.state.loggedId,
+            receiveID,
+            this.state.certificateId
+        );
     };
 
     componentDidMount() {
         const certificateId = this.props.match.params.id;
+        const user = localStorage.getItem("user");
+        const loggedUser = JSON.parse(user);
         getCertificate(certificateId).then((data) => {
             const { userID, orgName, courseName, assignDate, expirationDate } =
                 data;
             var userName = data.userID.name;
+
             this.setState((prev) => {
                 const temp = prev;
+                temp.loggedId = loggedUser._id;
                 temp.certificateId = certificateId;
+                temp.isSelf = loggedUser._id === userID._id;
                 temp.pageLoad = false;
                 temp.info = {
                     orgName,
@@ -123,12 +138,28 @@ class Dashboard extends React.Component {
                 return temp;
             });
         });
+        getFriends(loggedUser._id).then((data) => {
+            this.setState((prev) => {
+                const temp = prev;
+                temp.friends = data;
+                return temp;
+            });
+        });
     }
 
     render() {
         const { classes } = this.props;
-        const { authorized, verified, loading, pageLoad, certificateId, logo } =
-            this.state;
+        const {
+            friends,
+            authorized,
+            verified,
+            loading,
+            isSelf,
+            pageLoad,
+            loggedId,
+            certificateId,
+            logo,
+        } = this.state;
         const {
             userID,
             candidateName,
@@ -219,28 +250,6 @@ class Dashboard extends React.Component {
                                                     />
                                                     Verify
                                                 </Button>
-                                                <Button
-                                                    variant="contained"
-                                                    color="warning"
-                                                    className={classes.button}
-                                                    style={{
-                                                        width: "150px",
-                                                        marginRight: "10px",
-                                                    }}
-                                                    onClick={this.send}
-                                                >
-                                                    <LockIcon
-                                                        style={{
-                                                            marginLeft: "-15px",
-                                                            marginRight: "5px",
-                                                        }}
-                                                        fontSize="small"
-                                                        className={
-                                                            classes.leftIcon
-                                                        }
-                                                    />
-                                                    Send
-                                                </Button>
                                                 <Tooltip title={tooltipInfo}>
                                                     <HelpIcon
                                                         style={{
@@ -289,6 +298,57 @@ class Dashboard extends React.Component {
                                 )}
                             </Grid>
                         </Paper>
+                    )}
+                    {isSelf ? (
+                        <Paper className={classes.rightpaper}>
+                            {pageLoad ? (
+                                <Loader SIZE={170} />
+                            ) : (
+                                <>
+                                    <div>
+                                        <Typography
+                                            variant="h5"
+                                            color="inherit"
+                                            noWrap
+                                        >
+                                            Send certificate to friends
+                                        </Typography>
+                                    </div>
+                                    <Table striped hover>
+                                        <tbody>
+                                            {friends.map((user, index) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{user.name}</td>
+                                                        <td>
+                                                            <Button
+                                                                variant="contained"
+                                                                color="warning"
+                                                                onClick={() =>
+                                                                    this.send(
+                                                                        user._id
+                                                                    )
+                                                                }
+                                                            >
+                                                                <SendFill
+                                                                    fontSize="small"
+                                                                    className={
+                                                                        classes.leftIcon
+                                                                    }
+                                                                />
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </Table>
+                                </>
+                            )}
+                        </Paper>
+                    ) : (
+                        ""
                     )}
                 </Grid>
             </Grid>

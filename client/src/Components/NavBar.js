@@ -141,13 +141,11 @@ class NavBar extends React.Component {
         }
         const rightNav = isLogged ? (
             <>
-                <Nav.Link href="/display/certificate">
+                <Nav.Link href="/check">
                     <Bell />
                 </Nav.Link>
                 <NavDropdown title={title} id="collasible-nav-dropdown">
-                    <NavDropdown.Item href="#action/3.1">
-                        Profile
-                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                     {/* <NavDropdown.Divider /> */}
                     <NavDropdown.Item onClick={this.handleLogout}>
                         Logout
@@ -166,7 +164,7 @@ class NavBar extends React.Component {
                     </Nav.Link>
                 </>
             ) : (
-                <Nav.Link href="/">Profile</Nav.Link>
+                <Nav.Link href="/profile">Profile</Nav.Link>
             )
         ) : (
             ""
@@ -236,70 +234,6 @@ class NavBar extends React.Component {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            // <div className={classes.root}>
-            //     <AppBar position="static" color="primary">
-            //         <Toolbar>
-            //             <IconButton
-            //                 className={classes.menuButton}
-            //                 color="inherit"
-            //                 aria-label="Icon"
-            //                 component={Link}
-            //                 to="/"
-            //             >
-            //                 <HomeIcon />
-            //             </IconButton>
-            //             <Typography
-            //                 className={classes.title}
-            //                 variant="h6"
-            //                 color="inherit"
-            //                 noWrap
-            //             >
-            //                 Diploma certification
-            //             </Typography>
-            //             <div className={classes.search}>
-            //                 <div className={classes.searchIcon}>
-            //                     <SearchIcon />
-            //                 </div>
-            //                 <InputBase
-            //                     placeholder="Search…"
-            //                     classes={{
-            //                         root: classes.inputRoot,
-            //                         input: classes.inputInput,
-            //                     }}
-            //                 />
-            //             </div>
-            //             <div className={classes.grow} />
-            //             <div className={classes.sectionDesktop}>
-            //                 <IconButton color="inherit">
-            //                     <Badge badgeContent={17} color="secondary">
-            //                         <NotificationsIcon />
-            //                     </Badge>
-            //                 </IconButton>
-            //                 <IconButton
-            //                     aria-owns={
-            //                         isMenuOpen ? "material-appbar" : undefined
-            //                     }
-            //                     aria-haspopup="true"
-            //                     onClick={this.handleProfileMenuOpen}
-            //                     color="inherit"
-            //                 >
-            //                     <AccountCircle />
-            //                 </IconButton>
-            //             </div>
-            //             <div className={classes.sectionMobile}>
-            //                 <IconButton
-            //                     aria-haspopup="true"
-            //                     onClick={this.handleMobileMenuOpen}
-            //                     color="inherit"
-            //                 >
-            //                     <MoreIcon />
-            //                 </IconButton>
-            //             </div>
-            //         </Toolbar>
-            //     </AppBar>
-            //     {renderMenu}
-            //     {renderMobileMenu}
-            // </div>
         );
     }
 }

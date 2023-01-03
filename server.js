@@ -11,6 +11,10 @@ const Certificates = require("./model/Certificates");
 const User = require("./model/User");
 const Message = require("./model/Message");
 const { send } = require("express/lib/response");
+const EncryptRsa = require("encrypt-rsa").default;
+
+// create instance
+const encryptRsa = new EncryptRsa();
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -42,33 +46,32 @@ app.get("/certificate/data/:id", (req, res) => {
         })
         .catch((err) => res.status(400).send({ err }));
 });
-app.get("/message", (req, res) => {
-    Message.find()
+app.get("/message/:id", (req, res) => {
+    let userID = req.params.id;
+    Message.find({ receiver: userID })
+        .populate("receiver")
+        .populate("author")
         .then((obj) => {
             if (obj === null)
                 res.status(400).send({ err: "Certificate data doesn't exist" });
             else {
                 obj.forEach((message, index) => {
-                    var bytes = CryptoJS.AES.decrypt(
-                        message.hash,
-                        message.userID
-                    );
                     try {
-                        var decryptedData = JSON.parse([
-                            bytes.toString(CryptoJS.enc.Utf8),
-                        ]);
+                        var decryptedData =
+                            encryptRsa.decryptStringWithRsaPrivateKey({
+                                text: message.hash,
+                                privateKey: message.receiver.privateKey,
+                            });
                     } catch (e) {
                         var decryptedData = undefined;
                     }
-
-                    if (decryptedData !== undefined) {
-                        // obj[index].hash = decryptedData[0].privateKey;
-                        obj[index].hash =
-                            "http://localhost:3001/display/certificate/" +
-                            decryptedData[0].certificateID;
-                    } else {
-                        obj[index].hash = undefined;
-                    }
+                    obj[index].hash = decryptedData;
+                    console.log(obj);
+                    // if (decryptedData !== undefined) {
+                    //     obj[index].status = true;
+                    // } else {
+                    //     obj[index].status = false;
+                    // }
 
                     // User.findById(message.userID)
                     //     .then((user) => {
@@ -117,26 +120,39 @@ app.get("/certificate/verify/:id", (req, res) => {
         );
 });
 
-app.get("/certificate/send/:id", (req, res) => {
+app.get("/certificate/send/:loggedId/:receiveID/:id", (req, res) => {
     let certificateId = req.params.id;
+    let receiveID = req.params.receiveID;
+    let loggedId = req.params.loggedId;
 
     Certificates.findById(certificateId)
         .then((obj) => {
-            const userID = obj.userID;
-
-            User.findById(userID).then((user) => {
-                var data = [
-                    {
-                        privateKey: user.privateKey,
-                        certificateID: certificateId,
-                    },
-                ];
-                const hash = CryptoJS.AES.encrypt(
-                    JSON.stringify(data),
-                    userID
-                ).toString();
-                const message = new Message({ userID, hash });
-                message.save();
+            User.findById(receiveID).then((user) => {
+                var pbk = user.publicKey;
+                const encryptedText = encryptRsa.encryptStringWithRsaPublicKey({
+                    text: certificateId,
+                    publicKey: pbk,
+                });
+                // var data = [
+                //     {
+                //         privateKey: user.privateKey,
+                //         certificateID: certificateId,
+                //     },
+                // ];
+                // const hash = CryptoJS.AES.encrypt(
+                //     JSON.stringify(data),
+                //     userID
+                // ).toString();
+                const message = new Message({
+                    author: loggedId,
+                    receiver: receiveID,
+                    hash: encryptedText,
+                });
+                message.save().then((obj) => {
+                    res.status(200).send({
+                        obj,
+                    });
+                });
             });
         })
         .catch((err) =>
@@ -149,12 +165,10 @@ app.get("/certificate/send/:id", (req, res) => {
 app.post("/sign-up", (req, res) => {
     const { name, email, password } = req.body;
     const now = new Date().toString().slice(4, 24);
-    const privateKey = CryptoJS.HmacSHA1(now, "Key");
-    const publicKey = CryptoJS.HmacSHA1(now, "Key");
+    const { privateKey, publicKey } = encryptRsa.createPrivateAndPublicKeys();
     const user = new User({ name, email, password, publicKey, privateKey });
     user.save()
         .then((obj) => {
-            console.log(obj);
             if (obj === null)
                 res.status(400).send({ err: "Create new user failure!" });
             else
@@ -225,13 +239,49 @@ app.post("/certificate/generate", (req, res) => {
 app.get("/users", (req, res) => {
     User.find({ role: 0 })
         .then((obj) => {
-            if (obj === null)
-                res.status(400).send({ err: "Certificate data doesn't exist" });
+            if (obj === null) res.status(400).send({ err: "No user" });
             else {
                 res.send(obj);
             }
         })
         .catch((err) => res.status(400).send({ err: err }));
+});
+app.get("/certificates", (req, res) => {
+    Certificates.find()
+        .populate("userID")
+        .then((obj) => {
+            if (obj === null) res.status(400).send({ err: "No certificate" });
+            else {
+                res.send(obj);
+            }
+        })
+        .catch((err) => res.status(400).send({ err: err }));
+});
+app.get("/profile/:id", (req, res) => {
+    let userID = req.params.id;
+
+    Certificates.find({ userID: userID })
+        .then((obj) => {
+            res.send(obj);
+        })
+        .catch((err) =>
+            res
+                .status(400)
+                .send({ err: "No data found for the given certificateId" })
+        );
+});
+app.get("/friends/:id", (req, res) => {
+    let userID = req.params.id;
+
+    User.find({ _id: { $ne: userID } })
+        .then((obj) => {
+            res.send(obj);
+        })
+        .catch((err) =>
+            res
+                .status(400)
+                .send({ err: "No data found for the given certificateId" })
+        );
 });
 
 if (process.env.NODE_ENV === "production") {

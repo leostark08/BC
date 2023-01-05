@@ -13,6 +13,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
+import Card from "react-bootstrap/Card";
 
 import { getCertificates } from "../Utils/apiConnect";
 
@@ -42,6 +43,7 @@ const styles = (theme) => ({
         borderRadius: "7px",
         maxWidth: "95%",
         margin: theme.spacing(5),
+        marginBottom: 0,
         display: "flex",
         flexDirection: "column",
         padding: `${theme.spacing(4)}px ${theme.spacing(8)}px ${
@@ -96,6 +98,7 @@ class Profile extends React.Component {
         lastname: "",
         organization: "VKU University",
         orgLogo: "https://vku.udn.vn/uploads/no-image.png",
+        img: "https://media-exp1.licdn.com/dms/image/C561BAQEwutKnLTswTg/company-background_10000/0/1526381277588?e=2147483647&v=beta&t=pl3EK6S6X5XoFxPfg6vTR0Pj2xhkXyEJLBn0RedMb6Y",
         coursename: "",
         assignedOn: null,
         duration: 0,
@@ -159,63 +162,110 @@ class Profile extends React.Component {
             certificateId,
         } = this.state;
         return (
-            <Grid container>
-                <Grid item xs={12} sm={8}>
-                    <Paper className={classes.paper}>
-                        <Typography variant="h3" color="inherit">
-                            List of All Certificates
-                        </Typography>
-                        <Table striped bordered hover size="sm">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>ID</th>
-                                    <th>Certificate name</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {myArray.map((certificate, index) => {
-                                    console.log(certificate);
-                                    return (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>
-                                                <a
-                                                    href={
-                                                        "/display/certificate/" +
-                                                        certificate.certificateId
-                                                    }
-                                                >
-                                                    {certificate.certificateId}
-                                                </a>
-                                            </td>
-                                            <td>{certificate.courseName}</td>
-                                            <td></td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </Table>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                    <Paper className={classes.rightpaper}>
-                        <div style={{ maxWidth: "90%" }}>
-                            <img
-                                src={orgLogo}
-                                alt="org-logo"
-                                style={{ maxWidth: "100%" }}
+            <>
+                <Grid container>
+                    <Grid item xs={12} sm={12}>
+                        <Card
+                            className="bg-dark text-white"
+                            style={{ margin: 40, height: 200 }}
+                        >
+                            <Card.Img
+                                src={this.state.img}
+                                alt="Card image"
+                                style={{ height: 200, objectFit: "cover" }}
                             />
-                        </div>
-                        <div>
-                            <Typography variant="h5" color="inherit" noWrap>
-                                {organization}
-                            </Typography>
-                        </div>
-                    </Paper>
+                        </Card>
+                    </Grid>
                 </Grid>
-            </Grid>
+                <Grid container>
+                    <Grid item xs={12} sm={12}>
+                        <Paper className={classes.paper}>
+                            <Typography variant="h3" color="inherit">
+                                List of All Certificates
+                            </Typography>
+                            <Container>
+                                <Row>
+                                    {myArray.map((certificate, index) => {
+                                        return (
+                                            <Col
+                                                key={index}
+                                                sm={4}
+                                                style={{ marginTop: 30 }}
+                                            >
+                                                <Card>
+                                                    <Card.Img
+                                                        variant="top"
+                                                        src={this.state.orgLogo}
+                                                    />
+                                                    <Card.Body>
+                                                        <Card.Title>
+                                                            {
+                                                                certificate.courseName
+                                                            }
+                                                        </Card.Title>
+                                                        <Card.Text>
+                                                            {
+                                                                certificate
+                                                                    .userID.name
+                                                            }
+                                                        </Card.Text>
+                                                        <Button
+                                                            href={
+                                                                "/display/certificate/" +
+                                                                certificate.certificateId
+                                                            }
+                                                            variant="success"
+                                                        >
+                                                            View detail
+                                                        </Button>
+                                                    </Card.Body>
+                                                    <Card.Footer>
+                                                        <Typography
+                                                            variant="caption"
+                                                            color="inherit"
+                                                            noWrap
+                                                        >
+                                                            Assigned on:{" "}
+                                                            {Intl.DateTimeFormat(
+                                                                "en-US",
+                                                                {
+                                                                    year: "numeric",
+                                                                    month: "2-digit",
+                                                                    day: "2-digit",
+                                                                }
+                                                            ).format(
+                                                                certificate.assignDate
+                                                            )}
+                                                        </Typography>
+                                                        <br />
+                                                        <Typography
+                                                            variant="caption"
+                                                            color="inherit"
+                                                            noWrap
+                                                        >
+                                                            Expires on:{" "}
+                                                            {Intl.DateTimeFormat(
+                                                                "en-US",
+                                                                {
+                                                                    year: "numeric",
+                                                                    month: "2-digit",
+                                                                    day: "2-digit",
+                                                                }
+                                                            ).format(
+                                                                certificate.expirationDate
+                                                            )}
+                                                        </Typography>
+                                                    </Card.Footer>
+                                                </Card>
+                                            </Col>
+                                        );
+                                    })}
+                                </Row>
+                            </Container>
+                        </Paper>
+                    </Grid>
+                </Grid>
+            </>
         );
     }
 }

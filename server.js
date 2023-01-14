@@ -51,6 +51,7 @@ app.get("/message/:id", (req, res) => {
     Message.find({ receiver: userID })
         .populate("receiver")
         .populate("author")
+        .populate("certificate")
         .then((obj) => {
             if (obj === null)
                 res.status(400).send({ err: "Certificate data doesn't exist" });
@@ -146,6 +147,7 @@ app.get("/certificate/send/:loggedId/:receiveID/:id", (req, res) => {
                 const message = new Message({
                     author: loggedId,
                     receiver: receiveID,
+                    certificate: certificateId,
                     hash: encryptedText,
                 });
                 message.save().then((obj) => {

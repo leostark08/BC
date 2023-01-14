@@ -1,4 +1,6 @@
 import React from "react";
+import Table from "react-bootstrap/Table";
+import Badge from "react-bootstrap/Badge";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {
     getAllMessage,
@@ -21,9 +23,9 @@ const styles = (theme) => ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: `${theme.spacing(4)}px ${theme.spacing(8)}px ${
-            theme.spacing.unit * 3
-        }px`,
+        padding: `${theme.spacing(4)}px ${theme.spacing(8)}px ${theme.spacing(
+            3
+        )}px`,
     },
     rightpaper: {
         [theme.breakpoints.up("sm")]: {
@@ -38,9 +40,9 @@ const styles = (theme) => ({
         margin: theme.spacing(5),
         display: "flex",
         flexDirection: "column",
-        padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${
-            theme.spacing.unit * 3
-        }px`,
+        padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
+            3
+        )}px`,
     },
     verificationBox: {
         display: "flex",
@@ -117,12 +119,17 @@ class Check extends React.Component {
         const tooltipInfo = `This verifies whether the certification is secured and stored with correct information in the blockchain`;
         return (
             <div className="container">
-                <h1> Certification List</h1>
-                <ul>
-                    <table striped hover id="tableCer">
-                        <th>ID Certificates</th>
-                        <th>Name</th>
-                        <th>Status</th>
+                <h1>Certificates of friend</h1>
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Candidate name</th>
+                            <th>Certificate name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {myArray.map((message, index) => {
                             return (
                                 <tr key={index}>
@@ -136,17 +143,22 @@ class Check extends React.Component {
                                             {message.hash}
                                         </a>
                                     </td>
-                                    <td id="name">{message.author.name}</td>
+                                    <td id="">{message.author.name}</td>
+                                    <td id="">
+                                        {message.certificate.courseName}
+                                    </td>
                                     <td id="statusCer">
-                                        {message.hash !== undefined
-                                            ? "Intact"
-                                            : "Changed"}
+                                        {message.hash !== undefined ? (
+                                            <Badge bg="success">Intact</Badge>
+                                        ) : (
+                                            <Badge bg="danger">Changed</Badge>
+                                        )}
                                     </td>
                                 </tr>
                             );
                         })}
-                    </table>
-                </ul>
+                    </tbody>
+                </Table>
             </div>
         );
     }

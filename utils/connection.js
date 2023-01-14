@@ -69,7 +69,6 @@ const generateCertificate = function (
 ) {
     const self = this;
 
-    // Bootstrap the CertificationInstance abstraction for Use.
     CertificationInstance.setProvider(self.web3.currentProvider);
 
     return self.getAccounts().then((answer) => {

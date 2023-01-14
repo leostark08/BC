@@ -5,7 +5,7 @@
  * them to suit your project as necessary.
  *
  * More information about configuration can be found at:
- * 
+ *
  * https://trufflesuite.com/docs/truffle/reference/configuration
  *
  * To deploy via Infura you'll need a wallet provider (like @truffle/hdwallet-provider)
@@ -44,19 +44,19 @@ module.exports = {
         // options below to some value.
         //
         rinkeby: {
-            provider: function() {
-              return new HDWalletProvider(
-                process.env.MNEMONIC,
-                process.env.PROJECT_ENDPOINT
-              );
+            provider: function () {
+                return new HDWalletProvider(
+                    process.env.MNEMONIC,
+                    process.env.PROJECT_ENDPOINT
+                );
             },
-            network_id: "*"
-          },
+            network_id: "*",
+        },
         development: {
-            host: "127.0.0.1",     // Localhost (default: none)
-            port: 8545,            // Standard Ethereum port (default: none)
-            network_id: "*",       // Any network (default: none)
-            websockets: true
+            host: "127.0.0.1", // Localhost (default: none)
+            port: 8545, // Standard Ethereum port (default: none)
+            network_id: "*", // Any network (default: none)
+            websockets: true,
         },
         // Another network with more advanced options...
         // advanced: {
@@ -70,18 +70,25 @@ module.exports = {
         // Useful for deploying to a public network.
         // NB: It's important to wrap the provider as a function.
         ropsten: {
-            provider: () => new HDWalletProvider(`boost off child receive embrace dumb pond crater debate obvious shy home flower blur weather`, `https://ropsten.infura.io/v3/6a7e321b0c70455aa40fece4caa5bddf`),
-            network_id: 3,       // Ropsten's id
-            gas: 5500000,        // Ropsten has a lower block limit than mainnet
-            confirmations: 2,    // # of confs to wait between deployments. (default: 0)
-            timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-            skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+            provider: () =>
+                new HDWalletProvider(
+                    `boost off child receive embrace dumb pond crater debate obvious shy home flower blur weather`,
+                    `https://ropsten.infura.io/v3/6a7e321b0c70455aa40fece4caa5bddf`
+                ),
+            network_id: 3, // Ropsten's id
+            gas: 5500000, // Ropsten has a lower block limit than mainnet
+            confirmations: 2, // # of confs to wait between deployments. (default: 0)
+            timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
+            skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
         },
         test: {
             provider: function () {
-                return new HDWalletProvider(`boost off child receive embrace dumb pond crater debate obvious shy home flower blur weather`, "http://127.0.0.1:8545/");
+                return new HDWalletProvider(
+                    `boost off child receive embrace dumb pond crater debate obvious shy home flower blur weather`,
+                    "http://127.0.0.1:8545/"
+                );
             },
-            network_id: '*',
+            network_id: "*",
         },
         // Useful for private networks
         // private: {
@@ -93,7 +100,7 @@ module.exports = {
 
     // Set default mocha options here, use special reporters etc.
     mocha: {
-        timeout: 100000
+        timeout: 100000,
     },
 
     // Configure your compilers
@@ -108,7 +115,7 @@ module.exports = {
             //  },
             //  evmVersion: "byzantium"
             // }
-        }
+        },
     },
 
     // Truffle DB is currently disabled by default; to enable it, change enabled:

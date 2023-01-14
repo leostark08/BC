@@ -8,7 +8,7 @@ import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import { fade } from "@material-ui/core/styles/colorManipulator";
+// import { fade } from "@material-ui/core/styles/colorManipulator";
 import withStyles from "@material-ui/core/styles/withStyles";
 import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
@@ -44,21 +44,21 @@ const styles = (theme) => ({
             display: "block",
         },
     },
-    search: {
-        position: "relative",
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        "&:hover": {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginRight: theme.spacing(2),
-        marginLeft: 0,
-        width: "100%",
-        [theme.breakpoints.up("sm")]: {
-            marginLeft: theme.spacing(3),
-            width: "auto",
-        },
-    },
+    // search: {
+    //     position: "relative",
+    //     borderRadius: theme.shape.borderRadius,
+    //     backgroundColor: fade(theme.palette.common.white, 0.15),
+    //     "&:hover": {
+    //         backgroundColor: fade(theme.palette.common.white, 0.25),
+    //     },
+    //     marginRight: theme.spacing(2),
+    //     marginLeft: 0,
+    //     width: "100%",
+    //     [theme.breakpoints.up("sm")]: {
+    //         marginLeft: theme.spacing(3),
+    //         width: "auto",
+    //     },
+    // },
     searchIcon: {
         width: theme.spacing(9),
         height: "100%",

@@ -37,9 +37,9 @@ const styles = (theme) => ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: `${theme.spacing(4)}px ${theme.spacing(8)}px ${
-            theme.spacing.unit * 3
-        }px`,
+        padding: `${theme.spacing(4)}px ${theme.spacing(8)}px ${theme.spacing(
+            3
+        )}px`,
     },
     rightpaper: {
         [theme.breakpoints.up("sm")]: {
@@ -55,9 +55,9 @@ const styles = (theme) => ({
         marginRight: theme.spacing(5),
         display: "flex",
         flexDirection: "column",
-        padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${
-            theme.spacing.unit * 3
-        }px`,
+        padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
+            3
+        )}px`,
     },
     verificationBox: {
         display: "flex",

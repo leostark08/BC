@@ -13,6 +13,12 @@ const MessageSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    certificate: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "certificates",
+        required: true,
+        trim: true,
+    },
     hash: {
         type: String,
         required: true,
